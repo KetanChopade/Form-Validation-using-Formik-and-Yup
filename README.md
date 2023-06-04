@@ -1,70 +1,74 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Form validation
 
-## Available Scripts
+Complete React Form Validation using Formik & Yup in Hindi\
+https://www.youtube.com/watch?v=0S-pyTJ2ZvU&t=980s
 
-In the project directory, you can run:
+--------------------------------------------------------------------------------
+code available insie react > react-form-validation
 
-### `npm start`
+>> create project
+>> Install formik and yup
+	> npm i formik yup
+>> import formik
+	> import { useFormik } from 'formik';
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+>> Define initialValues must be same as form name element
+	> const initialValues = {
+    name:'',
+    email:'',
+    pswd:'',
+    cpswd:''
+}
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+>> Create formik funtion
+	> const { values , errors , touched, handleBlur , handleChange,handleSubmit } = useFormik({
+		initialValues:initialValues,
+		onSubmit : (values) => {
+			console.warn(values)
+		}
+	})
+	console.warn(Formik)
 
-### `npm test`
+>> add values name , onChange={handleChange}, onBlur={handleBlur} inside input
+	> <input
+              type="text"
+              className="form-control"
+              id="name"
+              placeholder="Enter name"
+              name="name"
+              value={values.name}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+>> Add on onSubmit funtion in form
+	> <form onSubmit={handleSubmit}>
+	
+>> Create schema 
 
-### `npm run build`
+	> import * as yup from 'yup';
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+	export  const SignupSchema = yup.object({
+		name:yup.string().min(2).max(20).required("Please enter your name"),
+		email:yup.string().email().required("Please enter your email"),
+		pswd:yup.string().min(6).required("Please enter your password"),
+		cpswd:yup.string().required("Please enter confirm password").oneOf([yup.ref("pswd"),null],"password must match"),
+	});
+	
+>> export SignupSchema  
+	> import { SignupSchema } from "../schema";
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+>> Fetch schema inside formik function after initialValues
+	> validationSchema:SignupSchema,
+	
+>> add error code in p tag after input field
+	> { errors.email && touched.email ? ( <p> {errors.email} </p> ) :null }
+	
+>> to clear form after submition create action parameters and use in onsubmit
+	> onSubmit : (values,action) => {
+			console.warn(values)
+			action.resetForm()
+		}
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+--------------------------------------------------------------------------------
